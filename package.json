@@ -1,0 +1,49 @@
+{
+  "name": "markdown",
+  "description": "Port of simple-markdown because why on earth change a winning formula.",
+  "version": "1.0.1",
+  "author": "Joost Lubach",
+  "private": false,
+  "license": "MIT",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/cjs/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npm run clean && npm run build:tsc",
+    "build:tsc": "npm run build:tsc:esm && npm run build:tsc:cjs",
+    "build:tsc:esm": "tsc -p tsconfig.prod.json --module es2022 --outDir dist/esm --declarationDir dist/types",
+    "build:tsc:cjs": "tsc -p tsconfig.prod.json --module commonjs --outDir dist/cjs --declaration false --declarationMap false",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
+    "check": "tsc --noEmit",
+    "lint": "eslint",
+    "test": "NODE_ENV=test DATA_ENV=test jest"
+  },
+  "peerDependencies": {
+    "react": "^19.2.3"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.20",
+    "@types/react": "18",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "copyfiles": "^2.4.1",
+    "eslint": "^9.38.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "globals": "^16.4.0",
+    "rimraf": "^5.0.5",
+    "typescript": "5.8.3",
+    "yaml": "^2.8.2"
+  },
+  "dependencies": {
+    "ytil": "workspace:*"
+  }
+}

@@ -1,0 +1,50 @@
+import { ReactNode } from 'react'
+
+export type Attr = string | number | boolean | null | undefined
+
+export type Rules = Record<string, Rule<any>>
+
+export interface Rule<E extends Element = Element> {
+  type: string
+  order: number
+  match: MatchFunction
+  quality?: (match: Capture, state: ParserState) => number
+
+  parse: (capture: Capture, parse: NestedParser, state: ParserState) => E | Array<E>
+  render?: (element: E, render: NestedRenderer, state: RendererState) => ReactNode
+}
+
+export type NestedParser = (source: string) => RenderNode
+export type ParserOutput<E extends Element> = E | E[]
+export type NestedRenderer = (node: RenderNode | string | undefined) => ReactNode
+
+export type Element = Record<string, unknown> & {content?: Node | string}
+export type Node<E extends Element = Element> = E | E[]
+
+export type RenderElement<E extends Element = Element> = Omit<E, 'content'> & {
+  $rule: Rule<E>
+  content?: RenderNode | string
+}
+export type RenderNode<E extends Element = Element> = RenderElement<E> | RenderElement<E>[]
+
+export interface Capture {
+  [index: number]: string
+  index: number
+  length: number
+  input: string
+}
+
+export interface ParserState {
+  inline: boolean
+  list: boolean
+  prevCapture: Capture | null
+}
+
+export interface RendererState {
+  key: number
+}
+
+export interface MatchFunction {
+  (source: string, state: ParserState): Capture | null | undefined
+  regex?: RegExp
+} 
