@@ -6,5 +6,7 @@ export const u = rule('u', {
     // precedence by length, loses all ties
     return capture[0].length
   },
-  parse: parseInline,
+  parse: (capture, parse, state) => ({
+    content: parseInline(capture, parse, state),
+  }),
 })

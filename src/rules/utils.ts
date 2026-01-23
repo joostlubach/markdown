@@ -8,8 +8,11 @@ import {
   Rule,
 } from '../types'
 
-let currentOrder = 0
+export let currentOrder = 0
 
+export function keepOrder() {
+  currentOrder -= 1
+}
 
 export function rule<E extends Element>(type: string, input: RuleInput<E>): Rule<E> {
   const rule = input as Rule<E>

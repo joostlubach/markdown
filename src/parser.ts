@@ -26,8 +26,6 @@ export function parserFor(rules: Rules, inline: boolean = false) {
       } else {
         parsed.$rule = rule
       }
-      
-
       if (isArray(parsed)) {
         result.push(...parsed)
       } else {
@@ -47,7 +45,7 @@ export function parserFor(rules: Rules, inline: boolean = false) {
       list:        false,
       prevCapture: null,
     }
-    return inner(source)
+    return inline ? inner(source) : inner(`${source}\n\n`)
   }
 }
 
@@ -83,8 +81,8 @@ function findBestRule(
 
     // If the next rule has the same order, we need to also consider it
     // to compare the qualities. Unless of course it doesn't match.
-    const nextRule = orderedRules[index + 1][1]
-    if (nextRule.order === rule.order && nextRule.quality != null) {
+    const nextRule = orderedRules[index + 1]?.[1]
+    if (nextRule != null && nextRule.order === rule.order && nextRule.quality != null) {
       continue
     }
 
