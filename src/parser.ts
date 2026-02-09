@@ -9,10 +9,7 @@ export function parserFor(rules: Rules, inline: boolean = false) {
   function inner(source: string): RenderElement[] {
     const result: RenderElement[] = []
     while (source.length > 0) {
-      console.groupCollapsed(`Parsing source: "${source}"`)
       const [type, rule, capture] = findBestRule(orderedRules, source, state)
-      console.log('Best rule:', type, rule, capture)
-      console.groupEnd()
 
       if (type == null || rule == null || capture == null) {
         console.warn("No applicable rule found for source:", source)
