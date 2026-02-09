@@ -1,9 +1,10 @@
 import { createElement } from 'react'
-import { RenderNode } from '../types'
 import { rule } from './utils'
 
 // recognize a `*` `-`, `+`, `1.`, `2.`... list bullet
-const LIST_BULLET = "(?:[*+-]|\\d+\\.)"
+const UNORDERED_LIST_BULLET = "[*+-]"
+const ORDERED_LIST_BULLET = "(?:[\\d\\w][\\.\\)])+[\\d\\w]?\\w?"
+const LIST_BULLET = "(?:" + UNORDERED_LIST_BULLET + "|" + ORDERED_LIST_BULLET + ")"
 // recognize the start of a list item:
 // leading space plus a bullet plus a space (`   * `)
 const LIST_ITEM_PREFIX = "( *)(" + LIST_BULLET + ") +"
@@ -130,11 +131,17 @@ export const list = rule('list', {
       }
 
       const result = parse(adjustedContent)
-
       // Restore our state before returning
       state.inline = oldStateInline
       state.list = oldStateList
-      return result
+
+      const bullet = prefixCapture ? prefixCapture[2] : ''
+      const marker = ['*', '-', '+'].includes(bullet) ? undefined : bullet
+      return {
+        type:    'list-item',
+        content: result,
+        marker,
+      }
     })
 
     return {
@@ -149,11 +156,11 @@ export const list = rule('list', {
     return createElement(Component, {
       key:   state.key,
       start: node.start,
-    }, node.items.map((item: RenderNode, index: number) => {
+    }, node.items.map((item, index) => {
       return createElement(
         'li',
-        {key: index},
-        render(item),
+        {key: index, 'data-marker': item.marker},
+        render(item.content),
       )
     }))
   },

@@ -17,6 +17,10 @@ export function render(node: RenderNode) {
       if (typeof node === 'string') {
         return node
       }
+      if (node.$rule == null) {
+        console.warn('No rule found for node', node)
+        return null
+      }
 
       const render = node.$rule.render ?? defaultRender
       return render(node, inner, state)

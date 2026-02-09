@@ -5,14 +5,9 @@ export const url = rule('url', {
   parse: (capture) => {
     return {
       type:    'link',
-      content: [
-        {
-          type:    'text',
-          content: capture[1],
-        },
-      ],
-      target: capture[1],
-      title:  undefined,
+      content: capture[1],
+      target:  capture[1],
+      title:   undefined,
     }
   },
 })

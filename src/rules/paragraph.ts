@@ -7,7 +7,7 @@ export const paragraph = rule('paragraph', {
     content: parseInline(capture, parse, state),
   }),
   render: (node, render, state) => {
-    return createElement('div', {key: state.key, className: 'paragraph'}, 
+    return createElement('p', {key: state.key}, 
       render(node.content),
     )
   },
