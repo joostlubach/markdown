@@ -16,6 +16,7 @@ export * from './escape'
 export * from './autolink'
 export * from './mailto'
 export * from './url'
+export * from './footnotes'
 export * from './link'
 export * from './image'
 

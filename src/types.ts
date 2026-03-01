@@ -38,10 +38,16 @@ export interface ParserState {
   inline: boolean
   list: boolean
   prevCapture: Capture | null
+  footnotes: Record<string, string>
 }
 
 export interface RendererState {
   key: number
+  renderers?: RendererMap
+}
+
+export interface RendererMap {
+  footnote?: (seq: string) => ReactNode
 }
 
 export interface MatchFunction {

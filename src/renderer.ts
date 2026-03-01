@@ -1,10 +1,11 @@
 import { isArray } from 'lodash'
 import { createElement, ReactNode } from 'react'
-import { NestedRenderer, RenderElement, RendererState, RenderNode } from './types'
+import { NestedRenderer, RenderElement, RendererMap, RendererState, RenderNode } from './types'
 
-export function render(node: RenderNode) {
+export function render(node: RenderNode, options: RenderOptions = {}) {
   const state: RendererState = {
-    key: 0,
+    key:       0,
+    renderers: options.renderers,
   }
 
   function inner(node: RenderNode | string | undefined): ReactNode {
@@ -45,4 +46,8 @@ function defaultRender(node: RenderNode, render: NestedRenderer, state: Renderer
     )
   }
   return isArray(node) ? node.map(inner) : inner(node)
+}
+
+export interface RenderOptions {
+  renderers?: RendererMap
 }

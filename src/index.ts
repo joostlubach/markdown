@@ -1,5 +1,6 @@
 export * from './parser'
 export * from './renderer'
 export * as rules from './rules'
+export type * from './rules'
 export * from './rules/utils'
 export * from './types'

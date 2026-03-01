@@ -2,8 +2,9 @@ import { isArray } from 'lodash'
 import { objectEntries } from 'ytil'
 import { Capture, ParserState, RenderElement, RenderNode, Rule, Rules } from './types'
 
-export function parserFor(rules: Rules, inline: boolean = false) {
+export function parserFor(rules: Rules, options: ParserOptions = {}) {
   const orderedRules = getOrderedRules(rules)
+  const {inline = false, callback} = options
 
   let state: ParserState
   function inner(source: string): RenderElement[] {
@@ -28,8 +29,10 @@ export function parserFor(rules: Rules, inline: boolean = false) {
         parsed.$rule = rule
       }
       if (isArray(parsed)) {
+        parsed.forEach(element => callback?.(type, element))
         result.push(...parsed)
       } else {
+        callback?.(type, parsed)
         result.push(parsed)
       }
 
@@ -45,6 +48,7 @@ export function parserFor(rules: Rules, inline: boolean = false) {
       inline:      inline,
       list:        false,
       prevCapture: null,
+      footnotes:   {},
     }
     return inline ? inner(source) : inner(`${source}\n\n`)
   }
@@ -103,3 +107,8 @@ export function preprocess(source: string): string {
 const CR_NEWLINE_R = /\r\n?/g
 const TAB_R = /\t/g
 const FORMFEED_R = /\f/g
+
+export interface ParserOptions {
+  inline?: boolean
+  callback?: (type: string, element: RenderElement) => void
+}
