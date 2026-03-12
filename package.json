@@ -23,7 +23,7 @@
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "check": "tsc --noEmit",
     "lint": "eslint",
-    "test": "NODE_ENV=test DATA_ENV=test jest"
+    "test": "vitest"
   },
   "peerDependencies": {
     "react": "^19.2.3"
