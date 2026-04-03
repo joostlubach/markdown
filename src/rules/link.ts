@@ -42,11 +42,15 @@ export const link = rule('link', {
     }
   },
   render: (node, output, state) => {
+    const href = sanitizeUrl(node.target)
+    const isExternal = href != null && /^https?:/i.test(href)
+
     return createElement('a', {
       key:    state.key,
-      href:   sanitizeUrl(node.target) || undefined,
+      href:   href,
       title:  node.title,
-      target: '_blank',
+      target: isExternal ? '_blank' : undefined,
+      rel:    isExternal ? 'noopener noreferrer' : undefined,
     }, output(node.content))
   },
 })
