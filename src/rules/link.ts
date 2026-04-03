@@ -43,9 +43,10 @@ export const link = rule('link', {
   },
   render: (node, output, state) => {
     return createElement('a', {
-      key:   state.key,
-      href:  sanitizeUrl(node.target) || undefined,
-      title: node.title,
+      key:    state.key,
+      href:   sanitizeUrl(node.target) || undefined,
+      title:  node.title,
+      target: '_blank',
     }, output(node.content))
   },
 })
