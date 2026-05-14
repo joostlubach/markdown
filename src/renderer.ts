@@ -1,6 +1,7 @@
 import { isArray } from 'lodash'
-import { createElement, ReactNode } from 'react'
-import { NestedRenderer, RenderElement, RendererMap, RendererState, RenderNode } from './types'
+import { createElement, type ReactNode } from 'react'
+import type * as rules from './rules'
+import { type NestedRenderer, type RenderElement, type RendererMap, type RendererState, type RenderNode } from './types'
 
 export function render(node: RenderNode, options: RenderOptions = {}) {
   const state: RendererState = {
@@ -23,7 +24,8 @@ export function render(node: RenderNode, options: RenderOptions = {}) {
         return null
       }
 
-      const render = node.$rule.render ?? defaultRender
+      const ruleType = node.$rule.type as keyof typeof rules
+      const render = options.renderers?.[ruleType] ?? node.$rule.render ?? defaultRender
       return render(node, inner, state)
     } finally {
       state.key += 1

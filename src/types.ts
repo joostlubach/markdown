@@ -1,4 +1,5 @@
-import { ReactNode } from 'react'
+import { type ReactNode } from 'react'
+import type * as rules from './rules'
 
 export type Attr = string | number | boolean | null | undefined
 
@@ -10,9 +11,12 @@ export interface Rule<E extends Element = Element> {
   match: MatchFunction
   quality?: (match: Capture, state: ParserState) => number
 
-  parse: (capture: Capture, parse: NestedParser, state: ParserState) => E | Array<E>
-  render?: (element: E, render: NestedRenderer, state: RendererState) => ReactNode
+  parse: ParseFn<E>
+  render?: RenderFn<E>
 }
+
+export type ParseFn<E extends Element> = (capture: Capture, parse: NestedParser, state: ParserState) => E | Array<E>
+export type RenderFn<E extends Element> = (element: E, render: NestedRenderer, state: RendererState) => ReactNode
 
 export type NestedParser = (source: string) => RenderNode
 export type ParserOutput<E extends Element> = E | E[]
@@ -26,6 +30,8 @@ export type RenderElement<E extends Element = Element> = Omit<E, 'content'> & {
   content?: RenderNode | string
 }
 export type RenderNode<E extends Element = Element> = RenderElement<E> | RenderElement<E>[]
+
+export type elementOf<R extends Rule<any>> = R extends Rule<infer E> ? E : never
 
 export interface Capture {
   [index: number]: string
@@ -44,9 +50,11 @@ export interface ParserState {
 export interface RendererState {
   key: number
   renderers?: RendererMap
+
+  [key: string]: unknown
 }
 
-export interface RendererMap {
+export type RendererMap = Partial<Record<keyof typeof rules, RenderFn<any>>> & {
   footnote?: (seq: string) => ReactNode
 }
 
