@@ -1,7 +1,7 @@
 import { isArray } from 'lodash'
-import { createElement, type ReactNode } from 'react'
-import type * as rules from './rules'
-import { type NestedRenderer, type RenderElement, type RendererMap, type RendererState, type RenderNode } from './types'
+import { createElement, ReactNode } from 'react'
+import * as rules from './rules'
+import { NestedRenderer, RenderElement, RendererMap, RendererState, RenderNode } from './types'
 
 export function render(node: RenderNode, options: RenderOptions = {}) {
   const state: RendererState = {

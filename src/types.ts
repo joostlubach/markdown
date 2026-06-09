@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react'
-import type * as rules from './rules'
+import { ReactNode } from 'react'
+import * as rules from './rules'
 
 export type Attr = string | number | boolean | null | undefined
 
