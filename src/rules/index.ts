@@ -4,6 +4,7 @@ import { keepOrder } from './utils'
 // Block level elements.
 export * from './heading'
 export * from './list'
+export * from './dl'
 export * from './blockQuote'
 export * from './codeBlock'
 export * from './fence'
