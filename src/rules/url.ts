@@ -1,3 +1,4 @@
+import { createElement } from 'react'
 import { inlineRegex, rule } from './utils'
 
 export const url = rule('url', {
@@ -9,5 +10,9 @@ export const url = rule('url', {
       target:  capture[1],
       title:   undefined,
     }
+  },
+  render: (node, output, state) => {
+    const {content, target, title} = node
+    return createElement('a', {key: state.key, href: target, title}, output(content))
   },
 })
