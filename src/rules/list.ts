@@ -160,7 +160,7 @@ export const list = rule('list', {
       return createElement(
         'li',
         {key: index, 'data-marker': item.marker},
-        render(item.content),
+        createElement('span', null, render(item.content)),
       )
     }))
   },
