@@ -13,14 +13,24 @@ export interface Rule<E extends Element = Element> {
 
   parse: ParseFn<E>
   render?: RenderFn<E>
+  serialize?: SerializeFn<E>
 }
 
 export type ParseFn<E extends Element> = (capture: Capture, parse: NestedParser, state: ParserState) => E | Array<E>
 export type RenderFn<E extends Element> = (element: E, render: NestedRenderer, state: RendererState) => ReactNode
+export type SerializeFn<E extends Element = Element> = (node: E, serializeArray: NestedSerializer) => string
 
 export type NestedParser = (source: string) => RenderNode
 export type ParserOutput<E extends Element> = E | E[]
 export type NestedRenderer = (node: RenderNode | string | undefined) => ReactNode
+export type NestedSerializer = (nodes: SerializeNode[]) => string
+
+/** Plain node shape used in the serialize path and for AST↔ProseMirror mapping. */
+export interface SerializeNode {
+  type: string
+  content?: SerializeNode | SerializeNode[] | string
+  [key: string]: unknown
+}
 
 export type Element = Record<string, unknown> & {content?: Node | string}
 export type Node<E extends Element = Element> = E | E[]

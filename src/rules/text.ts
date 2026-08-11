@@ -1,4 +1,4 @@
-import { anyScopeRegex, rule } from './utils'
+import { anyScopeRegex, escapeText, rule } from './utils'
 
 export const text = rule('text', {
   // Here we look for anything followed by non-symbols,
@@ -18,4 +18,5 @@ export const text = rule('text', {
   render: node => {
     return node.content
   },
+  serialize: node => escapeText(node.content as string),
 })

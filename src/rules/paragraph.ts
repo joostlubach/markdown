@@ -11,4 +11,8 @@ export const paragraph = rule('paragraph', {
       render(node.content),
     )
   },
+  serialize: (node, serializeArray) => {
+    const inner = Array.isArray(node.content) ? serializeArray(node.content as any) : String(node.content ?? '')
+    return `${inner}\n\n`
+  },
 })

@@ -75,3 +75,15 @@ export function parseBlock(capture: Capture | string, parse: NestedParser, state
 export function ignoreCapture() {
   return {}
 }
+
+/**
+ * Escapes characters in plain text that would be misinterpreted as markdown
+ * syntax on a round-trip through the parser.  Only non-alphanumeric,
+ * non-space chars are valid escape targets (matching the escape rule regex).
+ */
+export function escapeText(text: string): string {
+  return text.replace(ESCAPE_CHARS_R, '\\$&')
+}
+
+// Chars that trigger other rules when unescaped in inline text.
+const ESCAPE_CHARS_R = /[\\*_`\[{}~^!]/g

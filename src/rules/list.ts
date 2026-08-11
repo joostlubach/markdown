@@ -164,4 +164,17 @@ export const list = rule('list', {
       )
     }))
   },
+  serialize: (node, serializeArray) => {
+    const lines = (node.items as any[]).map((item: any, i: number) => {
+      const bullet = node.ordered ? `${i + 1}.` : '-'
+      let content: any = item.content
+      // Unwrap single paragraph so tight-list items round-trip correctly.
+      if (Array.isArray(content) && content.length === 1 && content[0].type === 'paragraph') {
+        content = content[0].content
+      }
+      const contentStr = Array.isArray(content) ? serializeArray(content) : String(content ?? '')
+      return `${bullet} ${contentStr}`
+    })
+    return lines.join('\n') + '\n\n'
+  },
 })

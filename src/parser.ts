@@ -1,6 +1,15 @@
 import { isArray } from 'lodash'
 import { objectEntries } from 'ytil'
-import { Capture, ParserState, RenderElement, RenderNode, Rule, Rules } from './types'
+import {
+  Capture,
+  NestedSerializer,
+  ParserState,
+  RenderElement,
+  RenderNode,
+  Rule,
+  Rules,
+  SerializeNode,
+} from './types'
 
 export function parserFor(rules: Rules, options: ParserOptions = {}) {
   const orderedRules = getOrderedRules(rules)
@@ -111,4 +120,37 @@ const FORMFEED_R = /\f/g
 export interface ParserOptions {
   inline?: boolean
   callback?: (type: string, element: RenderElement) => void
+}
+
+/**
+ * Builds a serialize function from a rules map. The returned function converts
+ * an AST (as SerializeNode[] or a single SerializeNode / RenderElement) back
+ * to the source text that would parse to an equivalent AST.
+ *
+ * Rules opt in by providing a `serialize` function. Rules without one are
+ * skipped (empty string emitted) with a console warning.
+ */
+export function serializerFor(rules: Rules) {
+  // Index by rule.type (= key in the rules record) for O(1) lookup.
+  const byType: Record<string, Rule> = {}
+  for (const [name, rule] of objectEntries(rules)) {
+    byType[name] = rule
+  }
+
+  const serializeArray: NestedSerializer = (nodes) => nodes.map(serializeNode).join('')
+
+  function serializeNode(node: SerializeNode | RenderElement): string {
+    const type: string | undefined = (node as any).type ?? (node as any).$rule?.type
+    const rule = type != null ? byType[type] : undefined
+    if (rule?.serialize == null) {
+      if (type != null) { console.warn(`No serialize fn for node type "${type}"`) }
+      return ''
+    }
+    return rule.serialize(node as any, serializeArray)
+  }
+
+  return function serialize(input: SerializeNode | SerializeNode[] | RenderElement | RenderElement[]): string {
+    if (isArray(input)) { return serializeArray(input as SerializeNode[]) }
+    return serializeNode(input as SerializeNode)
+  }
 }

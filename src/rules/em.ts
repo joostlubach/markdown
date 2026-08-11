@@ -43,4 +43,8 @@ export const em = rule('em', {
       render(element.content),
     )
   },
+  serialize: (node, serializeArray) => {
+    const inner = Array.isArray(node.content) ? serializeArray(node.content as any) : String(node.content ?? '')
+    return `_${inner}_`
+  },
 })

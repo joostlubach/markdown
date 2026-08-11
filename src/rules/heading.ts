@@ -12,4 +12,10 @@ export const heading = rule('heading', {
   render: (node, output, state) => {
     return createElement('h' + node.level, {key: state.key}, output(node.content))
   },
+  serialize: (node, serializeArray) => {
+    const content = Array.isArray((node as any).content)
+      ? serializeArray((node as any).content)
+      : serializeArray([(node as any).content])
+    return `${'#'.repeat((node as any).level)} ${content}\n\n`
+  },
 })

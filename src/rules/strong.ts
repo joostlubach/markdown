@@ -9,4 +9,8 @@ export const strong = rule('strong', {
   parse: (capture, parse, state) => ({
     content: parseInline(capture, parse, state),
   }),
+  serialize: (node, serializeArray) => {
+    const inner = Array.isArray(node.content) ? serializeArray(node.content as any) : String(node.content ?? '')
+    return `**${inner}**`
+  },
 })
