@@ -135,12 +135,9 @@ export const list = rule('list', {
       state.inline = oldStateInline
       state.list = oldStateList
 
-      const bullet = prefixCapture ? prefixCapture[2] : ''
-      const marker = ['*', '-', '+'].includes(bullet) ? undefined : bullet
       return {
         type:    'list-item',
         content: result,
-        marker,
       }
     })
 
@@ -152,14 +149,18 @@ export const list = rule('list', {
   },
   render: (node, render, state) => {
     const Component = node.ordered ? 'ol' : 'ul'
+    const style = node.ordered && node.start != null && node.start !== 1
+      ? {counterReset: `markdown-ordered-list ${node.start - 1}`}
+      : undefined
 
     return createElement(Component, {
       key:   state.key,
       start: node.start,
+      style,
     }, node.items.map((item, index) => {
       return createElement(
         'li',
-        {key: index, 'data-marker': item.marker},
+        {key: index},
         createElement('span', null, render(item.content)),
       )
     }))
