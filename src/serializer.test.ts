@@ -206,7 +206,7 @@ describe('parse(serialize(ast)) reproduces same structure', () => {
     const ast: SerializeNode[] = [{
       type:    'paragraph',
       content: [
-        {type: 'text',   content: 'Say '},
+        {type: 'text', content: 'Say '},
         {type: 'strong', content: [{type: 'text', content: 'hello'}]},
       ],
     }]
