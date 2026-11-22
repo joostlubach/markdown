@@ -1,5 +1,5 @@
 import { isArray } from 'lodash'
-import { objectEntries } from 'ytil'
+import { objectEntries } from '@mosdev/ytil'
 import {
   Capture,
   NestedSerializer,

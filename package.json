@@ -1,5 +1,5 @@
 {
-  "name": "markdown",
+  "name": "@mosdev/markdown",
   "description": "Port of simple-markdown because why on earth change a winning formula.",
   "version": "1.0.1",
   "author": "Joost Lubach",
@@ -47,6 +47,6 @@
   },
   "dependencies": {
     "lodash": "^4.17.23",
-    "ytil": "workspace:*"
+    "@mosdev/ytil": "workspace:*"
   }
 }
